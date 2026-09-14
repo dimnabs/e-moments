@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { frames, type Frame } from "@/data/product-shell";
+import { frames, type Frame } from "@/components/product-shell/constants";
 import { SHOT_COUNT } from "./constants";
 import styles from "./solo-photo-booth.module.css";
 

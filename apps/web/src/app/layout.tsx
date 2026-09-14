@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../components/product-shell/product-shell.css";
 
 export const metadata: Metadata = {
   title: "E-moment | Your moments, beautifully framed.",
