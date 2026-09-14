@@ -168,6 +168,7 @@ All photos and outputs must be private by default. Database records store metada
 - Add application health checks and structured logs
 - Automate PostgreSQL and media-storage backups
 - Add uptime/error monitoring
+- Before any merge or release to `main`, replace the current AI-generated prototype hero image with a commissioned, licensed, or otherwise production-approved visual asset
 - Perform a security and privacy review before inviting external testers
 
 ### Milestone 6 — Private beta and iteration
