@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { frames, type Frame } from "@/data/product-shell";
+import { SHOT_COUNT } from "./constants";
 import styles from "./solo-photo-booth.module.css";
 
 type CameraState = "idle" | "requesting" | "ready" | "denied" | "unavailable" | "capturing" | "revealing";
-
-const SHOT_COUNT = 4;
 
 function stopStream(stream: MediaStream | null) {
   stream?.getTracks().forEach((track) => track.stop());
