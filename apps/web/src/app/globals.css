@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #241a2b;
+  --paper: #fffaf7;
+  --rose: #f26b86;
+  --lavender: #d9c8ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Arial, Helvetica, sans-serif;
+}

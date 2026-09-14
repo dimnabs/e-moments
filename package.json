@@ -1,0 +1,21 @@
+{
+  "name": "e-moments",
+  "version": "0.1.0",
+  "private": true,
+  "description": "E-moment — Your moments, beautifully framed.",
+  "packageManager": "npm@11.7.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@e-moment/web",
+    "build": "npm run build --workspace=@e-moment/web",
+    "lint": "npm run lint --workspace=@e-moment/web",
+    "typecheck": "npm run typecheck --workspace=@e-moment/web"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=11.0.0"
+  }
+}
