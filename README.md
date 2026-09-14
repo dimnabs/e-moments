@@ -24,7 +24,7 @@ plan.md                Product and engineering roadmap
 1. Copy the local environment example:
 
    ```sh
-   cp .env.example .env.local
+   cp .env.example apps/web/.env.local
    ```
 
 2. Install dependencies:
