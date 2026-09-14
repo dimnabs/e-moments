@@ -17,7 +17,7 @@ export function ProductShell() {
     <header className="site-header">
       <a className="brand" href="#top" aria-label="E-moment home"><Mark /><span>E-moment</span></a>
       <nav aria-label="Primary navigation"><a href="#how-it-works">How it works</a><a href="#frames">Frames</a></nav>
-      <a className="header-action" href="#start">Start a moment <span aria-hidden="true">↗</span></a>
+      <a className="header-action" href="/create">Start a moment <span aria-hidden="true">↗</span></a>
     </header>
 
     <section className="hero" id="top">
@@ -25,7 +25,7 @@ export function ProductShell() {
         <p className="eyebrow"><span /> Digital photo box</p>
         <h1>A little closer.<br />One frame at a time.</h1>
         <p className="hero-description">Make a photo strip by yourself or with someone far away. Four tiny pauses, one keepsake to keep.</p>
-        <div className="hero-actions"><a className="button button-primary" href="#start">Create a moment <span aria-hidden="true">→</span></a><a className="button button-text" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a></div>
+        <div className="hero-actions"><a className="button button-primary" href="/create">Create a moment <span aria-hidden="true">→</span></a><a className="button button-text" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a></div>
         <p className="hero-proof">Solo or together <i /> Four photos <i /> One keepsake</p>
       </div>
       <div className="hero-art" aria-label="An example E-moment photo strip">
