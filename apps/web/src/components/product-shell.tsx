@@ -3,24 +3,15 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const frames = [
-  { id: "cherry", name: "Cherry afterglow", note: "Soft flash & handwritten details" },
-  { id: "lilac", name: "Lilac hello", note: "Calm tones for an easy catch-up" },
-  { id: "midnight", name: "Midnight postcard", note: "A little more dramatic" },
-];
-
-const modes = [
-  { id: "solo", eyebrow: "Just you", title: "Solo photo box", detail: "Take four photos when the mood is right." },
-  { id: "together", eyebrow: "Two screens", title: "Make one together", detail: "Share a private room and take your turns from anywhere." },
-];
+import { frames, modes, type Frame, type Mode } from "../data/product-shell";
 
 function Mark() {
   return <span aria-hidden="true" className="brand-mark"><span /><span /><span /><span /></span>;
 }
 
 export function ProductShell() {
-  const [selectedFrame, setSelectedFrame] = useState(frames[0]);
-  const [selectedMode, setSelectedMode] = useState(modes[0]);
+  const [selectedFrame, setSelectedFrame] = useState<Frame>(frames[0]);
+  const [selectedMode, setSelectedMode] = useState<Mode>(modes[0]);
 
   return <main>
     <header className="site-header">
