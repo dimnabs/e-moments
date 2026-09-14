@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { frames, modes, type Frame, type Mode } from "../data/product-shell";
+import { frames, modes, type Frame, type Mode } from "./constants";
 
 function Mark() {
   return <span aria-hidden="true" className="brand-mark"><span /><span /><span /><span /></span>;
