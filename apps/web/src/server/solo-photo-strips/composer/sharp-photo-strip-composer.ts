@@ -1,10 +1,8 @@
 import sharp from "sharp";
 
-import { framePalettes, SOLO_PHOTO_STRIP, type FrameId } from "./constants";
-
-type PhotoInput = {
-  buffer: Buffer;
-};
+import { SOLO_PHOTO_STRIP } from "../domain/constants";
+import { framePalettes } from "../domain/frame-palettes";
+import type { FrameId, PhotoInput } from "../domain/types";
 
 function escapeXml(value: string) {
   return value.replace(/[<>&"']/g, (character) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;" })[character] ?? character);
@@ -15,10 +13,9 @@ function textLayer(text: string, y: number, fontSize: number, color: string, fon
 }
 
 /** Creates the server-owned, high-resolution version of the browser photo strip. */
-export async function composeSoloPhotoStrip(photos: PhotoInput[], frameId: FrameId) {
+export async function composePhotoStrip(photos: PhotoInput[], frameId: FrameId) {
   const palette = framePalettes[frameId];
   const photoWidth = SOLO_PHOTO_STRIP.width - SOLO_PHOTO_STRIP.photoPadding * 2;
-
   const renderedPhotos = await Promise.all(photos.map(({ buffer }) => sharp(buffer, { limitInputPixels: SOLO_PHOTO_STRIP.maxInputPixels })
     .rotate()
     .resize({ width: photoWidth, height: SOLO_PHOTO_STRIP.photoHeight, fit: "cover", position: "centre" })
@@ -26,19 +23,10 @@ export async function composeSoloPhotoStrip(photos: PhotoInput[], frameId: Frame
     .toBuffer()));
 
   return sharp({
-    create: {
-      width: SOLO_PHOTO_STRIP.width,
-      height: SOLO_PHOTO_STRIP.height,
-      channels: 4,
-      background: palette.background,
-    },
+    create: { width: SOLO_PHOTO_STRIP.width, height: SOLO_PHOTO_STRIP.height, channels: 4, background: palette.background },
   })
     .composite([
-      ...renderedPhotos.map((input, index) => ({
-        input,
-        left: SOLO_PHOTO_STRIP.photoPadding,
-        top: SOLO_PHOTO_STRIP.photoTop + index * (SOLO_PHOTO_STRIP.photoHeight + SOLO_PHOTO_STRIP.photoGap),
-      })),
+      ...renderedPhotos.map((input, index) => ({ input, left: SOLO_PHOTO_STRIP.photoPadding, top: SOLO_PHOTO_STRIP.photoTop + index * (SOLO_PHOTO_STRIP.photoHeight + SOLO_PHOTO_STRIP.photoGap) })),
       { input: textLayer("e-moment", 105, 66, palette.foreground, "Georgia, serif", 'font-style="italic"') },
       { input: textLayer("A LITTLE MOMENT, YOURS", 1880, 28, palette.foreground, "Arial, sans-serif", 'letter-spacing="3"') },
     ])
