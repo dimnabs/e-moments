@@ -6,7 +6,8 @@ services:
       POSTGRES_USER: emoment
       POSTGRES_PASSWORD: emoment_dev_password
     ports:
-      - "5432:5432"
+      # Avoid colliding with a PostgreSQL service already installed on the host.
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
