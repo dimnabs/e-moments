@@ -10,6 +10,7 @@
 .primaryButton:disabled:hover { background: #b64e5a; }
 .secondaryButton:disabled:hover { background: transparent; }
 .downloadNote { color: #6a606e; font-size: .78rem; line-height: 1.6; margin: .9rem 0 0; max-width: 540px; }
+.consent { color: #6a606e; font-size: .78rem; line-height: 1.45; max-width: 31rem; }.consent input { accent-color: #b64e5a; margin-right: .35rem; }.consent a { color: inherit; text-decoration: underline; }
 .processingStatus { color: #5e4378; font-size: .85rem; line-height: 1.6; }
 .processingStatus p { margin: .85rem 0 0; }
 .processingStatus p:empty { display: none; }

@@ -28,6 +28,7 @@ export function SoloPhotoBooth() {
   const [processingState, setProcessingState] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [processingError, setProcessingError] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [consented, setConsented] = useState(false);
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -122,7 +123,7 @@ export function SoloPhotoBooth() {
   }
 
   const startSequence = () => {
-    if (cameraState !== "ready") return;
+    if (cameraState !== "ready" || !consented) return;
     setPhotos([]);
     setCameraState("capturing");
     runShot(0, []);
@@ -212,13 +213,13 @@ export function SoloPhotoBooth() {
             <button className={styles.secondaryButton} onClick={retake} disabled={processingState === "processing"}>Retake four photos</button>
             <button className={styles.primaryButton} onClick={downloadStrip} disabled={processingState === "processing"} aria-describedby="strip-download-note">{processingState === "processing" ? <>Preparing your strip <span className={styles.spinner} aria-hidden="true" /></> : processingState === "error" ? <>Try download again <span aria-hidden="true">↻</span></> : <>Download strip <span aria-hidden="true">↓</span></>}</button>
           </div>
-          <p id="strip-download-note" className={styles.downloadNote}>When you download, your four photos are uploaded to create and store your finished strip.</p>
+          <p id="strip-download-note" className={styles.downloadNote}>When you download, your photos are uploaded privately to create your strip. Sign in to keep it until you delete it; guest media is permanently removed after 24 hours.</p>
           <div className={`${styles.processingStatus} ${processingState === "error" ? styles.processingError : ""}`}>
             <p role="status" aria-atomic="true">{processingState === "processing" ? "Framing your photos. Keep this page open while we prepare your download." : processingState === "success" ? "Your strip is ready. If the download didn’t start, use the link below." : ""}</p>
             {processingState === "error" && <p role="alert">{processingError}</p>}
             {processingState === "success" && downloadUrl && <a href={downloadUrl} download="e-moment-photo-strip.png" target="_blank" rel="noopener noreferrer">Open your photo strip <span aria-hidden="true">↗</span></a>}
           </div>
-        </> : <div className={styles.cameraActions}>{cameraState === "ready" && <button className={styles.primaryButton} onClick={startSequence}>Take four photos <span>→</span></button>}{cameraState === "capturing" && <button className={styles.cancelButton} onClick={cancelSequence}>Cancel sequence</button>}<p aria-live="polite">{message}</p></div>}
+        </> : <div className={styles.cameraActions}>{cameraState === "ready" && <><label className={styles.consent}><input type="checkbox" checked={consented} onChange={(event) => setConsented(event.target.checked)} /> I agree to private processing of these photos. <Link href="/privacy">Privacy</Link> and <Link href="/terms">terms</Link>.</label><button className={styles.primaryButton} onClick={startSequence} disabled={!consented}>Take four photos <span>→</span></button></>}{cameraState === "capturing" && <button className={styles.cancelButton} onClick={cancelSequence}>Cancel sequence</button>}<p aria-live="polite">{message}</p></div>}
       </div>
       <aside className={styles.sidePanel}>
         <div><p className={styles.panelLabel}>Your progress</p><div className={styles.shots} aria-label={`${photos.length} of ${SHOT_COUNT} photos captured`}>{Array.from({ length: SHOT_COUNT }, (_, index) => <span key={index} className={photos[index] ? styles.shotFilled : ""}>{photos[index] ? <Image src={photos[index]} alt="" width={120} height={90} unoptimized /> : index + 1}</span>)}</div></div>

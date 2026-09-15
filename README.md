@@ -39,6 +39,15 @@ plan.md                Product and engineering roadmap
    docker compose up -d
    ```
 
+   PostgreSQL is exposed on port `5433` locally to avoid colliding with a
+   database service already running on port `5432`.
+
+   Then create the local account/gallery tables:
+
+   ```sh
+   npm run db:migrate
+   ```
+
 4. Start the web app:
 
    ```sh

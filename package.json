@@ -14,6 +14,7 @@
     "lint": "npm run lint --workspace=@e-moment/web",
     "typecheck": "npm run typecheck --workspace=@e-moment/web",
     "test": "npm run test --workspace=@e-moment/web"
+    ,"db:migrate": "node scripts/migrate.mjs"
   },
   "engines": {
     "node": ">=22.0.0",
