@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "outDir": ".test-build",
+    "target": "ES2022"
+  },
+  "include": [
+    "test/**/*.ts",
+    "src/server/shared-rooms/domain/**/*.ts",
+    "src/server/shared-rooms/services/in-memory-room-store.ts"
+  ],
+  "exclude": ["node_modules", ".next"]
+}

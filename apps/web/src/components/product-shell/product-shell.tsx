@@ -62,7 +62,7 @@ export function ProductShell() {
         {modes.map((mode) => <button key={mode.id} onClick={() => setSelectedMode(mode)} className={selectedMode.id === mode.id ? "mode-card selected" : "mode-card"} aria-pressed={selectedMode.id === mode.id}>
           <span className="mode-number">{mode.id === "solo" ? "01" : "02"}</span><span className="mode-content"><small>{mode.eyebrow}</small><strong>{mode.title}</strong><em>{mode.detail}</em></span><span className="mode-arrow" aria-hidden="true">{selectedMode.id === mode.id ? "↗" : "→"}</span>
         </button>)}
-        <p className="selection-note"><span>✦</span> {selectedMode.title} selected — camera setup is coming next.</p>
+        <a className="button button-primary" href={selectedMode.id === "solo" ? "/create" : "/together"}>Start {selectedMode.id === "solo" ? "a solo moment" : "a moment together"} <span aria-hidden="true">→</span></a>
       </div>
     </section>
     <footer><a className="brand" href="#top"><Mark /><span>E-moment</span></a><p>Your moments, beautifully framed.</p><span>© 2026</span></footer>
