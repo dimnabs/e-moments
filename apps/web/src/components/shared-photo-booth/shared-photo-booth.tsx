@@ -210,7 +210,11 @@ export function SharedPhotoBooth({ token }: { token: string }) {
       const remaining = schedule[slot] - (Date.now() + clockOffset.current);
       if (remaining > 0) { setCountdown({ slot, seconds: Math.ceil(remaining / 1000) }); return; }
       claimedSlots.current.add(slot);
-      if (remaining < -1200 || !videoRef.current || !streamRef.current?.active || document.visibilityState === "hidden") {
+      // Browser timers can be delayed while camera frames are being delivered or
+      // when two windows are sharing the machine. The server owns the capture
+      // window, so tolerate normal scheduling jitter and let the upload endpoint
+      // enforce the real deadline.
+      if (remaining < -10_000 || !videoRef.current || !streamRef.current?.active || document.visibilityState === "hidden") {
         void abortCapture("We missed a shared pose. Keep both pages visible with cameras on, and start a fresh room to try again.");
         return;
       }
