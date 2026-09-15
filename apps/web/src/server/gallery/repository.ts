@@ -7,13 +7,16 @@ export async function saveCompletedSession(input: { ownerId: string | null; fram
   const id = randomUUID();
   const deletionToken = input.ownerId ? null : randomBytes(24).toString("base64url");
   const purgeAt = input.ownerId ? null : new Date(Date.now() + 24 * 60 * 60 * 1000);
-  const db = database();
-  await db.query("begin");
+  const client = await database().connect();
+  await client.query("begin");
   try {
-    await db.query("insert into photo_session (id, owner_id, frame_id, guest_deletion_token, guest_purge_at) values ($1,$2,$3,$4,$5)", [id, input.ownerId, input.frameId, deletionToken, purgeAt]);
-    await Promise.all(input.media.map((object) => db.query("insert into media_object (session_id, storage_key, content_type, kind) values ($1,$2,$3,$4)", [id, object.key, object.contentType, object.key.endsWith("e-moment-photo-strip.png") ? "strip" : "original"])));
-    await db.query("commit");
-  } catch (error) { await db.query("rollback"); throw error; }
+    await client.query("insert into photo_session (id, owner_id, frame_id, guest_deletion_token, guest_purge_at) values ($1,$2,$3,$4,$5)", [id, input.ownerId, input.frameId, deletionToken, purgeAt]);
+    for (const object of input.media) {
+      await client.query("insert into media_object (session_id, storage_key, content_type, kind) values ($1,$2,$3,$4)", [id, object.key, object.contentType, object.key.endsWith("e-moment-photo-strip.png") ? "strip" : "original"]);
+    }
+    await client.query("commit");
+  } catch (error) { await client.query("rollback"); throw error; }
+  finally { client.release(); }
   return { id, deletionToken, guestPurgeAt: purgeAt?.toISOString() };
 }
 export async function sessionsForUser(ownerId: string) {

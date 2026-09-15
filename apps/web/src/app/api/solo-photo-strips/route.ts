@@ -24,9 +24,16 @@ export async function POST(request: Request) {
 
   try {
     const input = await validateCreateSoloPhotoStrip(formData);
-    const photoStrip = await createSoloPhotoStrip(input, new S3ObjectStorageRepository());
+    const storage = new S3ObjectStorageRepository();
+    const photoStrip = await createSoloPhotoStrip(input, storage);
     const user = await currentUser();
-    const saved = await saveCompletedSession({ ownerId: user?.id ?? null, frameId: input.frameId, media: photoStrip.media });
+    let saved;
+    try {
+      saved = await saveCompletedSession({ ownerId: user?.id ?? null, frameId: input.frameId, media: photoStrip.media });
+    } catch (error) {
+      await storage.deletePrivateObjects(photoStrip.media.map((object) => object.key)).catch(() => undefined);
+      throw error;
+    }
     return NextResponse.json({ downloadUrl: photoStrip.downloadUrl, expiresAt: photoStrip.expiresAt, session: { id: saved.id, savedToGallery: Boolean(user), ...(saved.guestPurgeAt ? { guestPurgeAt: saved.guestPurgeAt, deletionToken: saved.deletionToken } : {}) } }, { status: 201 });
   } catch (error) {
     if (error instanceof InvalidPhotoStripRequestError) {
