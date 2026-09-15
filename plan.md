@@ -187,7 +187,7 @@ All photos and outputs must be private by default. Database records store metada
 
 Every pull request should automatically:
 
-1. Install dependencies using a locked pnpm version.
+1. Install dependencies with `npm ci` using the committed npm lockfile.
 2. Run formatting/lint checks.
 3. Run TypeScript type checking.
 4. Run unit tests.
@@ -241,6 +241,21 @@ Choose based on beta feedback, not assumptions:
 - Deploying a tested `main` branch revision to the VPS is repeatable.
 - At least several beta users say the shared session felt more meaningful than trading ordinary selfies.
 
-## 11. Immediate next step
+## 11. Development status
 
-Complete Milestone 0: scaffold the monorepo, create the initial Next.js app, and add a local Docker Compose environment. After that, we will build the product shell before implementing camera and real-time functionality.
+The foundation, product shell, and solo capture/server-composition flow are
+implemented. Milestone 3 adds private two-person rooms, live presence and
+readiness, server-scheduled capture slots, tracked uploads, and one paired
+photo strip. See the README for local setup and the two-device acceptance check.
+
+The first shared-room implementation uses authenticated server-sent events and
+bounded in-memory room state in one long-lived Node.js process. This keeps the
+existing Next.js deployment and avoids a separate real-time service. Rooms do
+not survive server restarts; horizontal scaling requires a shared state store
+and event transport. This is an implementation decision for the prototype,
+not the production persistence architecture.
+
+Next is Milestone 4: accounts, a private gallery, user-controlled deletion, and
+explicit guest-media retention. Room expiry invalidates access to the room but
+does not delete objects from storage. Production rollout remains gated on
+Milestone 5, including the visual-asset and security/privacy reviews.

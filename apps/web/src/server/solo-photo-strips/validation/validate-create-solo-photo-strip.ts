@@ -33,7 +33,7 @@ function expectedSharpFormat(mimeType: AllowedImageMimeType) {
   return mimeType === "image/jpeg" ? "jpeg" : mimeType.slice("image/".length);
 }
 
-async function validatePhoto(file: File, index: number): Promise<PhotoInput> {
+export async function validatePhotoFile(file: File, index: number): Promise<PhotoInput> {
   if (!isAllowedImageMimeType(file.type)) {
     throw new InvalidPhotoStripRequestError(`Photo ${index + 1} must be a JPEG, PNG, or WebP image.`, "INVALID_PHOTO");
   }
@@ -62,7 +62,7 @@ async function validatePhoto(file: File, index: number): Promise<PhotoInput> {
 export async function validateCreateSoloPhotoStrip(formData: FormData): Promise<CreateSoloPhotoStripInput> {
   const frameId = validateFrameId(formData.get("frameId"));
   const files = validatePhotoCount(formData.getAll("photos"));
-  const photos = await Promise.all(files.map(validatePhoto));
+  const photos = await Promise.all(files.map(validatePhotoFile));
 
   return { frameId, photos };
 }

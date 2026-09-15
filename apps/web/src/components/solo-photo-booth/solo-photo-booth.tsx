@@ -195,7 +195,7 @@ export function SoloPhotoBooth() {
   const isCameraActive = cameraState === "ready" || cameraState === "capturing";
 
   return <main className={styles.page}>
-    <header className={styles.header}><Link href="/" className={styles.brand}><span className={styles.mark} aria-hidden="true"><i /><i /><i /><i /></span>E-moment</Link><span>Solo photo box</span></header>
+    <header className={styles.header}><Link href="/" className={styles.brand}><span className={styles.mark} aria-hidden="true"><i /><i /><i /><i /></span>E-moment</Link><Link href="/together">Make one together ↗</Link></header>
     <section className={styles.booth} aria-labelledby="booth-title">
       <div className={styles.intro}><p className={styles.eyebrow}><i /> Your solo moment</p><h1 id="booth-title">Make room for<br />a little moment.</h1><p>Take four photos, pick your favorite frame, and keep a little piece of today.</p></div>
       <div className={styles.cameraArea}>
