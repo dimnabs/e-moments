@@ -1,4 +1,4 @@
-import { CreateBucketCommand, GetObjectCommand, HeadBucketCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { CreateBucketCommand, DeleteObjectsCommand, GetObjectCommand, HeadBucketCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import { SOLO_PHOTO_STRIP } from "../domain/constants";
@@ -54,5 +54,12 @@ export class S3ObjectStorageRepository implements ObjectStorageRepository {
     const downloadUrl = await getSignedUrl(signingClient, new GetObjectCommand({ Bucket: config.bucket, Key: key, ResponseContentDisposition: 'attachment; filename="e-moment-photo-strip.png"', ResponseContentType: "image/png" }), { expiresIn: SOLO_PHOTO_STRIP.signedUrlTtlSeconds });
 
     return { downloadUrl, expiresAt };
+  }
+
+  async deletePrivateObjects(keys: string[]) {
+    if (!keys.length) return;
+    const config = storageConfig();
+    const client = s3Client(config, config.endpoint);
+    await client.send(new DeleteObjectsCommand({ Bucket: config.bucket, Delete: { Objects: keys.map((Key) => ({ Key })), Quiet: true } }));
   }
 }

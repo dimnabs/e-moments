@@ -39,6 +39,12 @@ plan.md                Product and engineering roadmap
    docker compose up -d
    ```
 
+   Then create the local account/gallery tables:
+
+   ```sh
+   npm run db:migrate
+   ```
+
 4. Start the web app:
 
    ```sh

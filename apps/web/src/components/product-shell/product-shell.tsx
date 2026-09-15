@@ -16,7 +16,7 @@ export function ProductShell() {
   return <main>
     <header className="site-header">
       <a className="brand" href="#top" aria-label="E-moment home"><Mark /><span>E-moment</span></a>
-      <nav aria-label="Primary navigation"><a href="#how-it-works">How it works</a><a href="#frames">Frames</a></nav>
+      <nav aria-label="Primary navigation"><a href="#how-it-works">How it works</a><a href="#frames">Frames</a><a href="/gallery">My gallery</a></nav>
       <a className="header-action" href="/create">Start a moment <span aria-hidden="true">↗</span></a>
     </header>
 
@@ -65,6 +65,6 @@ export function ProductShell() {
         <a className="button button-primary" href={selectedMode.id === "solo" ? "/create" : "/together"}>Start {selectedMode.id === "solo" ? "a solo moment" : "a moment together"} <span aria-hidden="true">→</span></a>
       </div>
     </section>
-    <footer><a className="brand" href="#top"><Mark /><span>E-moment</span></a><p>Your moments, beautifully framed.</p><span>© 2026</span></footer>
+    <footer><a className="brand" href="#top"><Mark /><span>E-moment</span></a><p>Your moments, beautifully framed.</p><a href="/gallery">My gallery</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><span>© 2026</span></footer>
   </main>;
 }

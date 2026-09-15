@@ -9,7 +9,7 @@ function extensionForMimeType(mimeType: CreateSoloPhotoStripInput["photos"][numb
   return mimeType === "image/jpeg" ? "jpg" : mimeType.slice("image/".length);
 }
 
-export async function createSoloPhotoStrip(input: CreateSoloPhotoStripInput, storage: ObjectStorageRepository): Promise<DownloadablePhotoStrip> {
+export async function createSoloPhotoStrip(input: CreateSoloPhotoStripInput, storage: ObjectStorageRepository): Promise<DownloadablePhotoStrip & { media: StoredObject[] }> {
   const strip = await composePhotoStrip(input.photos, input.frameId);
   const stripId = randomUUID();
   const originalPrefix = `solo-photo-strips/${stripId}/originals`;
@@ -20,6 +20,7 @@ export async function createSoloPhotoStrip(input: CreateSoloPhotoStripInput, sto
     contentType: photo.contentType,
   }));
 
-  await storage.storePrivateObjects([...originals, { key: outputKey, body: strip, contentType: "image/png" }]);
-  return storage.createDownloadUrl(outputKey);
+  const media = [...originals, { key: outputKey, body: strip, contentType: "image/png" }];
+  await storage.storePrivateObjects(media);
+  return { ...(await storage.createDownloadUrl(outputKey)), media };
 }

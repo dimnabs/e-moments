@@ -4,6 +4,8 @@ import { InvalidPhotoStripRequestError, StorageConfigurationError } from "@/serv
 import { S3ObjectStorageRepository } from "@/server/solo-photo-strips/repositories/s3-object-storage-repository";
 import { createSoloPhotoStrip } from "@/server/solo-photo-strips/services/create-solo-photo-strip";
 import { validateCreateSoloPhotoStrip } from "@/server/solo-photo-strips/validation/validate-create-solo-photo-strip";
+import { currentUser } from "@/server/accounts/auth";
+import { saveCompletedSession } from "@/server/gallery/repository";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,7 +25,9 @@ export async function POST(request: Request) {
   try {
     const input = await validateCreateSoloPhotoStrip(formData);
     const photoStrip = await createSoloPhotoStrip(input, new S3ObjectStorageRepository());
-    return NextResponse.json(photoStrip, { status: 201 });
+    const user = await currentUser();
+    const saved = await saveCompletedSession({ ownerId: user?.id ?? null, frameId: input.frameId, media: photoStrip.media });
+    return NextResponse.json({ downloadUrl: photoStrip.downloadUrl, expiresAt: photoStrip.expiresAt, session: { id: saved.id, savedToGallery: Boolean(user), ...(saved.guestPurgeAt ? { guestPurgeAt: saved.guestPurgeAt, deletionToken: saved.deletionToken } : {}) } }, { status: 201 });
   } catch (error) {
     if (error instanceof InvalidPhotoStripRequestError) {
       return errorResponse(error.message, 400, error.code);
